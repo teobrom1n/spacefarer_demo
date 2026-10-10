@@ -22,8 +22,30 @@ service SpacefarerService {
     }
   ]
   entity Spacefarers as projection on g.Spacefarers actions {
-    // Custom endpoint: ../Spacefarers(ID)/SpacefarerService.embark
-    action embark(destinationPlanet : String) returns Spacefarers;
+    action embark(
+      @(
+        title : 'Destination Planet',
+        Common.ValueList : {
+          CollectionPath : 'Planets',
+          Parameters : [
+            {
+              $Type : 'Common.ValueListParameterInOut',
+              LocalDataProperty : destinationPlanet,
+              ValueListProperty : 'code',
+            },
+            {
+              $Type : 'Common.ValueListParameterDisplayOnly',
+              ValueListProperty : 'name',
+            },
+            {
+              $Type : 'Common.ValueListParameterDisplayOnly',
+              ValueListProperty : 'sector',
+            },
+          ],
+        }
+      )
+      destinationPlanet : String
+    ) returns Spacefarers;
   };
   @readonly entity Planets     as projection on g.Planets;
   @readonly entity Departments as projection on g.Departments;
