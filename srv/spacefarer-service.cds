@@ -1,0 +1,31 @@
+using { galactic as g } from '../db/schema.cds';
+
+@path: '/cosmic'
+service SpacefarerService {
+
+  /**
+   * Spacefarer entity with Drafts enabled for Fiori
+   * Protected with Row-Level Authorization:
+   * - Commanders can see and manage all spacefarers.
+   * - Officers can ONLY see and manage spacefarers from their own planet ($user.planet).
+   */
+  @odata.draft.enabled
+  @restrict: [
+    {
+      grant: '*',
+      to: 'GalacticCommander'
+    },
+    {
+      grant: ['READ', 'CREATE', 'UPDATE', 'DELETE', 'embark'],
+      to: 'SpacefarerOfficer',
+      where: 'originPlanet_code = $user.planet'
+    }
+  ]
+  entity Spacefarers as projection on g.Spacefarers actions {
+    // Custom endpoint: ../Spacefarers(ID)/SpacefarerService.embark
+    action embark(destinationPlanet : String) returns Spacefarers;
+  };
+  @readonly entity Planets     as projection on g.Planets;
+  @readonly entity Departments as projection on g.Departments;
+  @readonly entity Positions   as projection on g.Positions;
+}
