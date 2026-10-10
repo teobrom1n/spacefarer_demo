@@ -1,0 +1,27 @@
+{
+  "requires": {
+    "auth": {
+      "kind": "mocked",
+      "users": {
+        "alice": {
+          "password": "alice",
+          "roles": ["SpacefarerOfficer"],
+          "attr": {
+            "planet": "PLANET_X"
+          }
+        },
+        "bob": {
+          "password": "bob",
+          "roles": ["SpacefarerOfficer"],
+          "attr": {
+            "planet": "PLANET_Y"
+          }
+        },
+        "commander": {
+          "password": "commander",
+          "roles": ["GalacticCommander"]
+        }
+      }
+    }
+  }
+}
