@@ -8,12 +8,14 @@
   "version": "1.0.0",
   "type": "module",
   "devDependencies": {
+    "@cap-js/cds-test": "^1.0.2",
     "@cap-js/sqlite": "^3",
     "cds-plugin-ui5": "^0.17.0"
   },
   "scripts": {
     "start": "cds-serve",
-    "watch-spacefarer": "cds watch --open spacefarer/index.html?sap-ui-xx-viewCache=false --livereload false"
+    "watch-spacefarer": "cds watch --open spacefarer/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "test": "node --test --test-force-exit test/"
   },
   "private": true,
   "workspaces": [
