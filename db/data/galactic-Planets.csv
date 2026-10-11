@@ -1,4 +1,4 @@
-code;name;sector
-PLANET_X;Planet X (Xylar Prime);Orion Arm
-PLANET_Y;Planet Y (Ypsilon Minor);Perseus Arm
-EARTH;Earth (Terra);Solar Sector
+code;name;sector;distanceFromSun
+PLANET_X;Planet X (Xylar Prime);Orion Arm;70
+PLANET_Y;Planet Y (Ypsilon Minor);Perseus Arm;35
+EARTH;Earth (Terra);Solar Sector;10
