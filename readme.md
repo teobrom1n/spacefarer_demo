@@ -1,22 +1,20 @@
 # Getting Started
 
-Welcome to your new CAP project.
+Welcome to Attila's Spacefarer project
 
-It contains these folders and files, following our recommended project layout:
+After opening the project in your IDE please follow the steps below:
 
-File or Folder | Purpose
----------|----------
-`app/` | content for UI frontends goes here
-`db/` | your domain models and data go here
-`srv/` | your service models and code go here
-`readme.md` | this getting started guide
+- Open the project and run `npm install`
+- Run `cds watch`
 
-## Next Steps
+- Open the following link in your browser: `http://localhost:4004/` and then please click `/spacefarer/test/flp.html#app-preview`
 
-- Open a new terminal and run `cds watch`
-- (in VS Code simply choose _**Terminal** > Run Task > cds watch_)
-- Start with your domain model, in a CDS file in `db/`
+It is mandatory to log in, for that, there are three dummy user available:
 
-## Learn More
+- commander:commander
+- alice:alice
+- bob:bob
 
-Learn more at <https://cap.cloud.sap>.
+You can explore CRUD funcions, and embark an astronaut to another planet for stardust.
+
+Feel free to roam around as a Spacefarer!
