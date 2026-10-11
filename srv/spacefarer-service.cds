@@ -21,6 +21,7 @@ service SpacefarerService {
       where: 'originPlanet_code = $user.planet'
     }
   ]
+  
   entity Spacefarers as projection on g.Spacefarers actions {
     action embark(
       @(

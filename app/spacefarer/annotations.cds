@@ -1,5 +1,11 @@
 using SpacefarerService as service from '../../srv/spacefarer-service';
 annotate service.Spacefarers with @(
+    UI.PresentationVariant : {
+        MaxItems : 5,
+        Visualizations : [
+            '@UI.LineItem'
+        ]
+    },
     UI.HeaderInfo : {
         TypeName : 'Spacefarer',
         TypeNamePlural : 'Spacefarers',
@@ -77,6 +83,12 @@ annotate service.Spacefarers with @(
             Label : 'Embark 🚀',
         },
     ],
+     UI.SelectionFields : [
+        originPlanet_code,
+        department_ID,
+        spacesuitColor_ID,
+    ],
+    
     UI.LineItem : [
         {
             $Type : 'UI.DataFieldForAction',
