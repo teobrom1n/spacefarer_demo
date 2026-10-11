@@ -1,5 +1,5 @@
-ID;name;email;stardustCollection;wormholeNavigationSkill;spacesuitColor;originPlanet_code;department_ID;position_ID
-11111111-1111-1111-1111-111111111111;Zara Vance;attila.balind.repo@proton.me;850;92;Nebula Purple;PLANET_X;DEP_NAV;POS_NAV
-22222222-2222-2222-2222-222222222222;Orion Pax;attila.balind.repo@proton.me;120;45;Solar Gold;PLANET_X;DEP_EXP;POS_CDT
-33333333-3333-3333-3333-333333333333;Lyra Nova;attila.balind.repo@proton.me;420;78;Supernova Red;PLANET_Y;DEP_SCI;POS_HARV
-44444444-4444-4444-4444-444444444444;Tiberius Drake;attila.balind.repo@proton.me;990;98;Cosmic Obsidian;PLANET_Y;DEP_NAV;POS_CDR
+ID;name;email;stardustCollection;wormholeNavigationSkill;spacesuitColor_ID;originPlanet_code;department_ID;position_ID;deploymentPlanet_code
+11111111-1111-1111-1111-111111111111;Zara Vance;attila.balind.repo@proton.me;850;92;1;PLANET_X;DEP_NAV;POS_NAV;null
+22222222-2222-2222-2222-222222222222;Orion Pax;attila.balind.repo@proton.me;120;45;2;PLANET_X;DEP_EXP;POS_CDT;null
+33333333-3333-3333-3333-333333333333;Lyra Nova;attila.balind.repo@proton.me;420;78;3;PLANET_Y;DEP_SCI;POS_HARV;mull
+44444444-4444-4444-4444-444444444444;Tiberius Drake;attila.balind.repo@proton.me;990;98;4;PLANET_Y;DEP_NAV;POS_CDR;null

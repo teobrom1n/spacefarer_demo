@@ -21,20 +21,21 @@ export default class SpacefarerService extends cds.ApplicationService {
           pass: testAccount.pass,
         },
       });
-      LOG.info('📬 [EMAIL SERVICE READY] Using Ethereal virtual mail server.');
+      LOG.info('[EMAIL SERVICE READY] Using Ethereal virtual mail server.');
     } catch (err) {
-      LOG.warn('⚠️ Could not connect to Ethereal mail server, using local fallback logger.', err.message);
+      LOG.warn('Could not connect to Ethereal mail server, using local fallback logger.', err.message);
       transporter = {
         sendMail: async (options) => {
-          LOG.info(`📨 [SIMULATED EMAIL] To: ${options.to} | Subject: ${options.subject}`);
+          LOG.info(`[SIMULATED EMAIL] To: ${options.to} | Subject: ${options.subject}`);
           return { messageId: 'simulated-id' };
         },
       };
     }
 
-    // =========================================================================
+    
     // 1. @Before Event: Planet Check, Validation, & Skill Enhancement
-    // =========================================================================
+
+
     this.before(['CREATE', 'NEW'], Targets, async (req) => {
       const candidate = req.data;
 
@@ -53,6 +54,7 @@ export default class SpacefarerService extends cds.ApplicationService {
       }
 
       // CHECK 2: Validate Stardust Collection
+
       if (candidate.stardustCollection < 0) {
         return req.error(
           400,
@@ -64,22 +66,29 @@ export default class SpacefarerService extends cds.ApplicationService {
       if (candidate.stardustCollection >= 500) {
         const initialSkill = candidate.wormholeNavigationSkill || 10;
         candidate.wormholeNavigationSkill = initialSkill + 20;
-        LOG.info(`✨ [COSMIC ENHANCEMENT] Navigation skill boosted to ${candidate.wormholeNavigationSkill}!`);
+        LOG.info(`[COSMIC ENHANCEMENT] Navigation skill boosted to ${candidate.wormholeNavigationSkill}!`);
       }
 
-      if (!candidate.spacesuitColor) {
-        candidate.spacesuitColor = 'Standard Nebula Blue';
+      if (!candidate.spacesuitColor_ID && !candidate.spacesuitColor) {
+        candidate.spacesuitColor_ID = 1; // Default to Cosmic Blue
       }
     });
 
-    // =========================================================================
+   
+
     // 2. @After Event: Send REAL Congratulatory Email
-    // =========================================================================
+
+
     this.after('CREATE', Spacefarers, async (spacefarer, req) => {
       const name = spacefarer?.name || req.data?.name || 'Spacefarer';
       const recipient = spacefarer?.email || 'attila.balind.repo@proton.me';
       const planet = spacefarer?.originPlanet_code || req.data?.originPlanet_code || 'Uncharted Sector';
-      const suitColor = spacefarer?.spacesuitColor || req.data?.spacesuitColor || 'Nebula Blue';
+      let suitColor = 'Cosmic Blue';
+      const colorId = spacefarer?.spacesuitColor_ID || req.data?.spacesuitColor_ID;
+      if (colorId) {
+        const colorRecord = await SELECT.one.from('galactic.Colors').where({ ID: colorId });
+        if (colorRecord?.name) suitColor = colorRecord.name;
+      }
       const stardust = spacefarer?.stardustCollection ?? req.data?.stardustCollection ?? 0;
       const skill = spacefarer?.wormholeNavigationSkill ?? req.data?.wormholeNavigationSkill ?? 10;
 
@@ -107,10 +116,10 @@ export default class SpacefarerService extends cds.ApplicationService {
 
       try {
         const info = await transporter.sendMail(mailOptions);
-        LOG.info(`🚀 [REAL EMAIL SENT] To: ${recipient}`);
+        LOG.info(`[REAL EMAIL SENT] To: ${recipient}`);
         const previewUrl = nodemailer.getTestMessageUrl(info);
         if (previewUrl) {
-          LOG.info(`🔗 PREVIEW LINK: ${previewUrl}`);
+          req.info(`Enlistment email is sent -> ${previewUrl}`);
         }
       } catch (err) {
         LOG.error('Failed to dispatch cosmic email:', err);
@@ -118,16 +127,10 @@ export default class SpacefarerService extends cds.ApplicationService {
     });
 
 
-
-
-    // =========================================================================
     // 3. CUSTOM ACTION: embark (The Journey Begins!)
-    // =========================================================================
     // Before embarking: Validate skills & destination
 
 
-
-    
     this.before('embark', Spacefarers, async (req) => {
       const { destinationPlanet } = req.data;
       if (!destinationPlanet) {
@@ -145,12 +148,11 @@ export default class SpacefarerService extends cds.ApplicationService {
           `Launch Aborted! ${spacefarer.name}'s navigation skill (${spacefarer.wormholeNavigationSkill}) is below minimum safe threshold (40).`
         );
       }
-      if (spacefarer.originPlanet_code === destinationPlanet) {
+      if (spacefarer.deploymentPlanet_code === destinationPlanet) {
         LOG.info('destination = ', destinationPlanet);
-        LOG.info('originPlanet = ', spacefarer.originPlanet_code);
         return req.error(
           400,
-          `Launch Aborted! You cannot travel to your origin planet (${spacefarer.originPlanet_code}).`
+          `Launch Aborted! You cannot travel to your current deployed planet (${spacefarer.deploymentPlanet.name}).`
         );
       }
     });
@@ -163,9 +165,10 @@ export default class SpacefarerService extends cds.ApplicationService {
       const newStardust = Math.max(0, (spacefarer.stardustCollection || 0) - 50);
       await UPDATE(req.subject).with({
         stardustCollection: newStardust,
+        deploymentPlanet_code: destinationPlanet,
       });
       LOG.info(
-        `🌟 [LAUNCH SUCCESSFUL] ${spacefarer.name} embarked for ${destinationPlanet}! Fuel consumed. Remaining stardust: ${newStardust}`
+        `[LAUNCH SUCCESSFUL] ${spacefarer.name} embarked for ${destinationPlanet}! Fuel consumed. Remaining stardust: ${newStardust}`
       );
       // Return the updated spacefarer
       return await SELECT.one.from(req.subject);
@@ -190,10 +193,10 @@ export default class SpacefarerService extends cds.ApplicationService {
       };
       try {
         const info = await transporter.sendMail(mailOptions);
-        LOG.info(`🚀 [DEPARTURE EMAIL SENT] To: ${recipient}`);
+        LOG.info(`[DEPARTURE EMAIL SENT] To: ${recipient}`);
         const previewUrl = nodemailer.getTestMessageUrl(info);
         if (previewUrl) {
-          LOG.info(`🔗 PREVIEW LINK: ${previewUrl}`);
+          req.info(`Departure email is sent -> ${previewUrl}`);
         }
       } catch (err) {
         LOG.error('Failed to dispatch departure email:', err);

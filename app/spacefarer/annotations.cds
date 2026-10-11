@@ -1,5 +1,17 @@
 using SpacefarerService as service from '../../srv/spacefarer-service';
 annotate service.Spacefarers with @(
+    UI.HeaderInfo : {
+        TypeName : 'Spacefarer',
+        TypeNamePlural : 'Spacefarers',
+        Title : {
+            $Type : 'UI.DataField',
+            Value : name,
+        },
+        Description : {
+            $Type : 'UI.DataField',
+            Value : position.title,
+        },
+    },
     UI.FieldGroup #GeneratedGroup : {
         $Type : 'UI.FieldGroupType',
         Data : [
@@ -26,12 +38,17 @@ annotate service.Spacefarers with @(
             {
                 $Type : 'UI.DataField',
                 Label : 'Spacesuit color',
-                Value : spacesuitColor,
+                Value : spacesuitColor_ID,
             },
             {
                 $Type : 'UI.DataField',
                 Label : 'Origin planet',
                 Value : originPlanet_code,
+            },
+            {
+                $Type : 'UI.DataField',
+                Label : 'Current deployment',
+                Value : deploymentPlanet_code,
             },
             {
                 $Type : 'UI.DataField',
@@ -71,11 +88,6 @@ annotate service.Spacefarers with @(
             Label : 'Name',
             Value : name,
         },
-        /*{
-            $Type : 'UI.DataField',
-            Label : 'email',
-            Value : email,
-        },*/
         {
             $Type : 'UI.DataField',
             Label : 'Stardust Collection',
@@ -89,7 +101,12 @@ annotate service.Spacefarers with @(
         {
             $Type : 'UI.DataField',
             Label : 'Spacesuit Color',
-            Value : spacesuitColor,
+            Value : spacesuitColor_ID,
+        },
+        {
+            $Type : 'UI.DataField',
+            Label : 'Current deployment',
+            Value : deploymentPlanet_code,
         },
     ],
 );
@@ -105,10 +122,32 @@ annotate service.Spacefarers with {
             CollectionPath : 'Planets',
             Parameters : [
                 {
-                    $Type : 'Common.ValueListParameterInOut',
-                    LocalDataProperty : originPlanet_code,
-                    ValueListProperty : 'code',
+                    $Type : 'Common.ValueListParameterDisplayOnly',
+                    ValueListProperty : 'name',
                 },
+                {
+                    $Type : 'Common.ValueListParameterDisplayOnly',
+                    ValueListProperty : 'sector',
+                },
+                {
+                    $Type : 'Common.ValueListParameterDisplayOnly',
+                    ValueListProperty : 'distanceFromSun',
+                },
+            ],
+        }
+    );
+};
+
+annotate service.Spacefarers with {
+    deploymentPlanet @(
+        Common.Text : {
+            $value : deploymentPlanet.name,
+            ![@UI.TextArrangement] : #TextOnly,
+        },
+        Common.ValueList : {
+            $Type : 'Common.ValueListType',
+            CollectionPath : 'Planets',
+            Parameters : [
                 {
                     $Type : 'Common.ValueListParameterDisplayOnly',
                     ValueListProperty : 'name',
@@ -116,6 +155,10 @@ annotate service.Spacefarers with {
                 {
                     $Type : 'Common.ValueListParameterDisplayOnly',
                     ValueListProperty : 'sector',
+                },
+                {
+                    $Type : 'Common.ValueListParameterDisplayOnly',
+                    ValueListProperty : 'distanceFromSun',
                 },
             ],
         }
@@ -132,11 +175,6 @@ annotate service.Spacefarers with {
             $Type : 'Common.ValueListType',
             CollectionPath : 'Departments',
             Parameters : [
-                {
-                    $Type : 'Common.ValueListParameterInOut',
-                    LocalDataProperty : department_ID,
-                    ValueListProperty : 'ID',
-                },
                 {
                     $Type : 'Common.ValueListParameterDisplayOnly',
                     ValueListProperty : 'name',
@@ -161,13 +199,27 @@ annotate service.Spacefarers with {
             CollectionPath : 'Positions',
             Parameters : [
                 {
-                    $Type : 'Common.ValueListParameterInOut',
-                    LocalDataProperty : position_ID,
-                    ValueListProperty : 'ID',
-                },
-                {
                     $Type : 'Common.ValueListParameterDisplayOnly',
                     ValueListProperty : 'title',
+                },
+            ],
+        }
+    );
+};
+
+annotate service.Spacefarers with {
+    spacesuitColor @(
+        Common.Text : {
+            $value : spacesuitColor.name,
+            ![@UI.TextArrangement] : #TextOnly,
+        },
+        Common.ValueList : {
+            $Type : 'Common.ValueListType',
+            CollectionPath : 'Colors',
+            Parameters : [
+                {
+                    $Type : 'Common.ValueListParameterDisplayOnly',
+                    ValueListProperty : 'name',
                 },
             ],
         }

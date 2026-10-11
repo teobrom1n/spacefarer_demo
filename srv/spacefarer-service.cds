@@ -41,6 +41,10 @@ service SpacefarerService {
               $Type : 'Common.ValueListParameterDisplayOnly',
               ValueListProperty : 'sector',
             },
+            {
+              $Type : 'Common.ValueListParameterDisplayOnly',
+              ValueListProperty : 'distanceFromSun',
+            },
           ],
         }
       )
@@ -50,4 +54,5 @@ service SpacefarerService {
   @readonly entity Planets     as projection on g.Planets;
   @readonly entity Departments as projection on g.Departments;
   @readonly entity Positions   as projection on g.Positions;
+  @readonly entity Colors      as projection on g.Colors;
 }
